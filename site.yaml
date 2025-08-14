@@ -1,0 +1,4 @@
+- hosts: lighthouses
+  roles:
+    - nebula
+    - unbound

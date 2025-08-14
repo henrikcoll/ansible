@@ -1,0 +1,113 @@
+pki:
+  ca: /etc/nebula/trust.crt
+  cert: /etc/nebula/host.crt
+  key: /etc/nebula/host.key
+  disconnect_invalid: true
+  initiating_version: 2
+
+static_host_map:
+{% for host in groups['lighthouses'] %}
+  {% if hostvars[host].nebula_ip is defined and hostvars[host].nebula_port is defined and hostvars[host].public_addrs is defined %}
+  "{{ hostvars[host].nebula_ip }}": ["{{ ipv4 }}:4242","[{{ ipv6 }}]:4242"]
+  {% endif %}
+{% endfor %}
+
+lighthouse:
+  am_lighthouse: {% if is_lighthouse %}true{% else %}false{% endif %}
+  
+  serve_dns: {% if is_lighthouse %}true{% else %}false{% endif %}
+
+  dns:
+    host: 0.0.0.0
+    port: 5353
+  interval: 60
+  {% if not is_lighthouse %}
+  hosts:
+    {% for host in groups['lighthouses'] %}
+    {% if hostvars[host].nebula_ip is defined %}
+    - "{{ hostvars[host].nebula_ip }}"
+    {% endif %}
+    {% endfor %}
+  {% endif %}
+
+listen:
+  host: "::"
+  port: 4242
+
+punchy:
+  punch: true
+  respond: true
+  delay: 1s
+  respond_delay: 5s
+
+cipher: aes
+
+relay:
+  am_relay: true
+  use_relays: false
+
+tun:
+  disabled: false
+  dev: nebula1
+  drop_local_broadcast: false
+  drop_multicast: false
+  tx_queue: 500
+  mtu: 1300
+
+logging:
+  level: info
+  format: text
+
+stats:
+  type: prometheus
+  listen: {{ nebula_ip }}:8080
+  path: /metrics
+  namespace: nebula
+  subsystem: lighthouse
+  interval: 5s
+  message_metrics: true
+  lighthouse_metrics: true
+
+tunnels:
+  drop_inactive: true
+  inactivity_timeout: 5m
+
+firewall:
+  outbound_action: reject
+  inbound_action: reject
+  conntrack:
+    tcp_timeout: 12m
+    udp_timeout: 3m
+    default_timeout: 10m
+
+  outbound:
+    - port: any
+      proto: any
+      host: any
+
+  inbound:
+    - port: any
+      proto: icmp
+      host: any
+
+    - port: 8080
+      proto: tcp
+      groups:
+        - prometheus
+
+    - port: 53
+      proto: udp
+      host: any
+      
+    - port: 5353
+      proto: udp
+      host: any
+
+    - port: 22
+      proto: tcp
+      host: any
+
+    - port: 2222
+      proto: tcp
+      groups:
+        - admin

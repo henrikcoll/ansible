@@ -1,0 +1,12 @@
+is_lighthouse: true
+nebula_ip: 100.64.0.2
+
+nebula_name: "lighthouse-02.lab"
+
+ipv6: "2a03:94e0:ffff:185:125:168::193"
+ipv4: "185.125.168.193"
+
+ansible_host: "{{ ipv6 }}"
+ansible_user: "root"
+
+ansible_python_interpreter: /usr/bin/python3.11

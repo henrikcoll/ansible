@@ -1,0 +1,14 @@
+---
+- name: start unbound.service
+  systemd:
+    name: unbound
+    state: started
+    enabled: true
+    daemon_reload: true
+
+- name: reload unbound.service
+  systemd:
+    name: unbound
+    state: reloaded
+    enabled: true
+    daemon_reload: true

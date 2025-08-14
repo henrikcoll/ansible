@@ -1,0 +1,46 @@
+---
+- name: Creates nebula's etc directory
+  file:
+    path: /etc/nebula
+    state: directory
+
+- name: Download nebula binaries
+  get_url:
+    url: https://github.com/slackhq/nebula/releases/download/v{{ nebula_version }}/nebula-linux-amd64.tar.gz
+    dest: /tmp/nebula-linux-amd64.tar.gz
+
+- name: Extract nebula binaries to the app directory
+  unarchive:
+    src: /tmp/nebula-linux-amd64.tar.gz
+    dest: /usr/local/bin/
+    remote_src: true
+
+- name: Set Nebula config
+  template:
+    src: templates/config.yml.j2
+    dest: /etc/nebula/config.yml
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - "reload nebula.service"
+
+- name: Copy trust.crt
+  template:
+    src: files/trust.crt
+    dest: /etc/nebula/trust.crt
+    owner: root
+    group: root
+    mode: "0755"
+  notify:
+    - "reload nebula.service"
+
+- name: Set Nebula service
+  template:
+    src: files/nebula.service
+    dest: /etc/systemd/system/nebula.service
+    owner: root
+    group: root
+    mode: "0755"
+  notify:
+    - "start nebula.service"

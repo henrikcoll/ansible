@@ -1,0 +1,34 @@
+server:
+  interface: {{ nebula_ip }}
+  port: 53
+
+  access-control: 100.64.0.0/10 allow_snoop
+
+  hide-version: yes
+  hide-identity: yes
+
+  domain-insecure: lab
+  deny-any: no
+
+  local-zone: "lab." transparent
+  local-data: "lab. IN SOA ns1.lab. admin.lab. 2 3600 900 604800 3600"
+  local-data: "lab. IN NS lighthouse-01.lab."
+  local-data: "lab. IN NS lighthouse-02.lab."
+  local-data: "lab. IN NS lighthouse-03.lab."
+  local-data: "lighthouse-01.lab. IN A 100.64.0.1"
+  local-data: "lighthouse-02.lab. IN A 100.64.0.2"
+  local-data: "lighthouse-03.lab. IN A 100.64.0.3"
+
+  local-data: "home.lab. IN A 100.119.28.115"
+  local-data: "memos.lab. IN A 100.119.28.115"
+  local-data: "bao.lab. IN A 100.93.45.22"
+  local-data: "prometheus.lab. IN A 100.123.45.29"
+  local-data: "grafana.lab. IN A 100.100.202.31"
+
+  forward-zone:
+    name: "lab"
+    forward-addr: {{ nebula_ip }}@5353
+
+  forward-zone:
+    name: "."
+    forward-addr: 9.9.9.9
