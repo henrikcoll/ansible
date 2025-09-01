@@ -8,7 +8,7 @@ pki:
 static_host_map:
 {% for host in groups['lighthouses'] %}
   {% if hostvars[host].nebula_ip is defined and hostvars[host].nebula_port is defined and hostvars[host].public_addrs is defined %}
-  "{{ hostvars[host].nebula_ip }}": ["{{ ipv4 }}:4242","[{{ ipv6 }}]:4242"]
+  "{{ hostvars[host].nebula_ip }}": ["{{ public_ipv4 }}:4242","[{{ public_ipv6 }}]:4242"]
   {% endif %}
 {% endfor %}
 
