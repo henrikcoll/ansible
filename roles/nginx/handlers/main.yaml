@@ -1,0 +1,21 @@
+---
+- name: start nginx.service
+  systemd:
+    name: nginx
+    state: started
+    enabled: true
+    daemon_reload: true
+
+- name: restart nginx.service
+  systemd:
+    name: nginx
+    state: restarted
+    enabled: true
+    daemon_reload: true
+
+- name: reload nginx.service
+  systemd:
+    name: nginx
+    state: reloaded
+    enabled: true
+    daemon_reload: true
