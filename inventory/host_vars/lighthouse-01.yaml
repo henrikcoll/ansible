@@ -3,10 +3,13 @@ nebula_ip: 100.64.0.1
 
 nebula_name: "lighthouse-01.lab"
 
-ipv6: "2a03:94e0:ffff:185:125:168::210"
-ipv4: "185.125.168.210"
+public_ipv6: "2a03:94e0:ffff:185:125:168::210"
+public_ipv4: "185.125.168.210"
 
-ansible_host: "{{ ipv6 }}"
+private_ipv6: "2a03:94e0:ffff:185:125:168::74"
+private_ipv4: "185.125.168.74"
+
+ansible_host: "{{ public_ipv6 }}"
 ansible_user: "root"
 
 ansible_python_interpreter: /usr/bin/python3.11
