@@ -2,7 +2,4 @@
   vars_files:
     - vars.yaml
   roles:
-    - nebula
-    - unbound
     - nginx
-    - haproxy
