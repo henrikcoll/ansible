@@ -1,0 +1,19 @@
+- name: Issue certificate using Cloudflare DNS
+  command: >
+    {{ acme_install_dir }}/acme.sh --issue
+    {% for d in cert.domains %}-d {{ d }} {% endfor %}
+    --dns dns_cf
+  environment:
+    CF_Token: "{{ cloudflare_api_token }}"
+  args:
+    creates: "/root/.acme.sh/{{ cert.name }}_ecc/{{ cert.name }}.cer"
+
+- name: Deploy certificate using haproxy hook
+  command: >
+    {{ acme_install_dir }}/acme.sh --deploy
+    -d {{ cert.name }}
+    --deploy-hook haproxy
+  environment:
+    DEPLOY_HAPROXY_PEM_PATH: "{{ haproxy_tls_dir }}"
+  args:
+    creates: "{{ haproxy_tls_dir }}/{{ cert.name }}.pem"

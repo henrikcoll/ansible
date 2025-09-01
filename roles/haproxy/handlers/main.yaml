@@ -1,0 +1,21 @@
+---
+- name: start haproxy.service
+  systemd:
+    name: haproxy
+    state: started
+    enabled: true
+    daemon_reload: true
+
+- name: restart haproxy.service
+  systemd:
+    name: haproxy
+    state: restarted
+    enabled: true
+    daemon_reload: true
+
+- name: reload haproxy.service
+  systemd:
+    name: haproxy
+    state: reloaded
+    enabled: true
+    daemon_reload: true

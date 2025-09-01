@@ -1,0 +1,14 @@
+email: "henrik@heka.no"
+acme_install_dir: "/root/acme.sh"
+haproxy_tls_dir: "/etc/haproxy/tls"
+cloudflare_api_token: ""
+
+certs:
+  - name: "heka.no"
+    domains:
+      - "heka.no"
+      - "*.heka.no"
+  - name: "heka.dev"
+    domains:
+      - "heka.dev"
+      - "*.heka.dev"

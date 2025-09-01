@@ -1,0 +1,16 @@
+- name: Install haproxy
+  apt:
+    name: haproxy
+    state: present
+
+- import_tasks: acme.yaml
+
+- name: Create haproxy config
+  template:
+    src: templates/haproxy.cfg
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - restart haproxy.service
